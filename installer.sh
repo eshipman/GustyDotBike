@@ -5,8 +5,11 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+# If /var/www/html does not exist, create it
+if [[ ! -d /var/www/html ]]; then
+    sudo mkdir -p /var/www/html
 # If /var/www/html is not empty, warn the user
-if [[ "$(ls -l /var/www/html)" != "total 0" ]]; then
+elif [[ "$(ls -l /var/www/html)" != "total 0" ]]; then
     echo "Warning: this may erase any data in /var/www/html!"
     echo "It is recommended to back up any data first."
     read -p "Would you like to continue? (Y/n): " answer
