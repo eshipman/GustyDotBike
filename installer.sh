@@ -30,7 +30,7 @@ read -p "Enter your current sudo username (default is ubuntu on AWS): " USER
 
 # Install the dependencies
 sudo apt-get update
-sudo apt-get -y install apache2 mariadb-server php libapache2-mod-php php-mysql \
+sudo apt-get -y install curl apache2 mariadb-server php libapache2-mod-php php-mysql \
     php-curl php-gd php-mbstring php-xml php-xmlrpc openjdk-8-jre
 
 # Verify apache is running
