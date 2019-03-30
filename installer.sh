@@ -111,10 +111,12 @@ sudo chmod -R g+w /var/www/html/wp-content/themes
 sudo chmod -R g+w /var/www/html/wp-content/plugins
 sudo echo "$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)" >> /var/www/html/wp-config.php
 
-sudo sed -i -e "s/define('DB_NAME', 'database_name_here');/define('DB_NAME', 'wordpress');/" \
+sudo cat /var/www/html/wp-config.php | \
+    sudo sed -e "s/define('DB_NAME', 'database_name_here');/define('DB_NAME', 'wordpress');/" \
     -e "s/define('DB_USER', 'username_here');/define('DB_USER', 'wordpressuser');/" \
     -e "s/define('DB_PASSWORD', 'password_here');/define('DB_PASSWORD', '${MYSQL_PASSWORD}');/" \
-    /var/www/html/wp-config.php
+    > /var/www/html/tmp
+sudo mv /var/www/html/tmp /var/www/html/wp-config.php
 
 sudo echo "
 define('FS_METHOD', 'direct');
