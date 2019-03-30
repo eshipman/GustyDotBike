@@ -26,7 +26,6 @@ USER=""
 
 read -p "Enter your mySQL root password: " ROOT_PASSWORD
 read -p "Enter your wordpressuser MYSQL Password: " MYSQL_PASSWORD
-read -p "Enter your current sudo username (default is ubuntu on AWS): " USER 
 
 # Install the dependencies
 sudo apt-get update
@@ -104,7 +103,7 @@ mkdir /tmp/wordpress/wp-content/upgrade
 sudo cp -a /tmp/wordpress/. /var/www/html
 
 # the user must be a sudoer
-sudo chown -R ${USER}:www-data /var/www/html
+sudo chown -R www-data:www-data /var/www/html
 sudo find /var/www/html -type d -exec chmod g+s {} \;
 sudo chmod g+w /var/www/html/wp-content
 sudo chmod -R g+w /var/www/html/wp-content/themes
