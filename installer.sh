@@ -88,6 +88,7 @@ sudo apache2ctl configtest
 sudo systemctl restart apache2
 # unzip the wordpress config to html
 tar -xvzf "$WORDPRESS_CONFIG" -C /var/www/html
+sudo mv /var/www/html/wordpress/* /var/www/html
 
 sudo mysql -u root --password="${ROOT_PASSWORD}" -e "
 CREATE DATABASE wordpress;
