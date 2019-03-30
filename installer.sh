@@ -78,7 +78,7 @@ sudo systemctl status apache2
 # Install wordpress
 sudo echo "
 <Directory /var/www/html/>
-AllowOverride All
+    AllowOverride All
 </Directory>" >> /etc/apache2/apache2.conf
 
 sudo a2emod rewrite
@@ -86,15 +86,22 @@ sudo a2emod rewrite
 sudo apache2ctl configtest
 
 sudo systemctl restart apache2
-# unzip the wordpress config to html
-tar -xvzf "$WORDPRESS_CONFIG" -C /var/www/html
-sudo mv /var/www/html/wordpress/* /var/www/html
 
 sudo mysql -u root --password="${ROOT_PASSWORD}" -e "
 CREATE DATABASE wordpress;
 CREATE USER wordpressuser@localhost IDENTIFIED BY '${MYSQL_PASSWORD}';
 GRANT ALL PRIVILEGES ON wordpress.* TO wordpressuser@localhost IDENTIFIED BY '${MYSQL_PASSWORD}';
 FLUSH PRIVILEGES;"
+
+# Download and install wordpress
+cd /tmp
+curl -O https://wordpress.org/latest.tar.gz
+tar -xvzf latest.tar.gz
+touch /tmp/wordpress/.htaccess
+chmod 660 /tmp/wordpress/.htaccess
+cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
+mkdir /tmp/wordpress/wp-content/upgrade
+sudo cp -a /tmp/wordpress/. /var/www/html
 
 # the user must be a sudoer
 sudo chown -R ${USER}:www-data /var/www/html
@@ -103,15 +110,12 @@ sudo chmod g+w /var/www/html/wp-content
 sudo chmod -R g+w /var/www/html/wp-content/themes
 sudo chmod -R g+w /var/www/html/wp-content/plugins
 sudo echo "$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)" >> /var/www/html/wp-config.php
+
+sudo sed -i -e "s/define('DB_NAME', 'database_name_here');/define('DB_NAME', 'wordpress');/" \
+    -e "s/define('DB_USER', 'username_here');/define('DB_USER', 'wordpressuser');/" \
+    -e "s/define('DB_PASSWORD', 'password_here');/define('DB_PASSWORD', '${MYSQL_PASSWORD}');/" \
+    /var/www/html/wp-config.php
+
 sudo echo "
-define('DB_NAME', 'wordpress');
-
-/** MySQL database username */
-define('DB_USER', 'wordpressuser');
-
-/** MySQL database password */
-define('DB_PASSWORD', '$MYSQL_PASSWORD');
-
-define('FS_METHOD', 'direct');" >> /var/www/html/wp-config.php
-
-
+define('FS_METHOD', 'direct');
+" >> /var/www/html/wp-config.php
