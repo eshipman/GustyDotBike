@@ -97,7 +97,7 @@ GRANT ALL PRIVILEGES ON wordpress.* TO wordpressuser@localhost IDENTIFIED BY '${
 FLUSH PRIVILEGES;"
 
 # the user must be a sudoer
- sudo chown -R ubuntu:www-data /var/www/html
+sudo chown -R ${USER}:www-data /var/www/html
 sudo find /var/www/html -type d -exec chmod g+s {} \;
 sudo chmod g+w /var/www/html/wp-content
 sudo chmod -R g+w /var/www/html/wp-content/themes
