@@ -12,7 +12,8 @@ if [[ ! -d /var/www/html ]]; then
 elif [[ "$(ls -l /var/www/html)" != "total 0" ]]; then
     echo "Warning: this may erase any data in /var/www/html!"
     echo "It is recommended to back up any data first."
-    read -p "Would you like to continue? (Y/n): " answer
+    echo -ne "Would you like to continue? (Y/n): "
+    read answer
     # Exit if the user inputs anything other than a yes
     if echo "${answer}" | grep -vE '^(Y|Yes|y|yes|YES)$' >/dev/null; then
         exit
