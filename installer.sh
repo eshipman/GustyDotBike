@@ -20,7 +20,6 @@ elif [[ "$(ls -l /var/www/html)" != "total 0" ]]; then
     fi
 fi
 
-WORDPRESS_CONFIG="./wordpress.tar.gz"
 ROOT_PASSWORD=""
 MYSQL_PASSWORD=""
 USER=""
